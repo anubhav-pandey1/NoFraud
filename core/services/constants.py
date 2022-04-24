@@ -1,7 +1,5 @@
 from decimal import Decimal
 
-from core.services import utils
-
 MIN_TRANSACTION_AMOUNT = Decimal(0)
 MAX_TRANSACTION_AMOUNT = Decimal(10_00_00_000)
 MAX_TRANSACTION_DIGITS = 10
