@@ -37,19 +37,18 @@ $ python manage.py runserver
 4. Use a client like Postman or Thunder Client to make requests to the API endpoint:
  http://localhost:8000/core/check-fraud/
 
-### Sample request data based on the test DB:
-
-##### Not a terrorist, so it will work: Do not make this number a terrorist, keep this number clean
-{
-    "sender": "9999999997",
-    "amount": 11.2345,
-    "receiver_account_number": "12910234234"
-}
+#### Sample request data based on the test DB:
 
 ##### Not a terrorist, so it will work: Make this a terrorist by sending more than 10 requests in 2 mins
 {
     "sender": "9999999998",
     "amount": 131.2345,
+    "receiver_account_number": "12910234234"
+}
+##### Not a terrorist, so it will work: Do not make this number a terrorist, keep this number clean
+{
+    "sender": "9999999997",
+    "amount": 11.2345,
     "receiver_account_number": "12910234234"
 }
 
@@ -59,3 +58,9 @@ $ python manage.py runserver
     "amount": 121.2345,
     "receiver_account_number": "12910234234"
 }
+
+5. Run tests using the installed coverage package
+```sh
+$ coverage run manage.py test
+$ coverage report
+```
