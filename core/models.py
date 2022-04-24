@@ -1,7 +1,6 @@
 import uuid
 
 from django.db import models
-from django.dispatch import receiver
 from django.utils import timezone
 
 from core.validators import (
@@ -11,6 +10,7 @@ from core.validators import (
     transaction_amount_validators,
 )
 from core.choices import TransactionStatusChoices
+from core.services import constants
 
 # Create your models here.
 
@@ -18,18 +18,21 @@ from core.choices import TransactionStatusChoices
 class User(models.Model):
 
     phone_number = models.CharField(
+        max_length=constants.INDIAN_PHONE_NUMBER_MAX_LENGTH,
         primary_key=True,
         unique=True,
         validators=indian_mobile_number_validators(),
     )
 
     upi_id = models.CharField(
+        max_length=255,
         unique=True,
         null=True,
         blank=True,
         validators=indian_upi_id_validators(),
     )
     account_number = models.CharField(
+        max_length=constants.INDIAN_BANK_ACCOUNT_MAX_LENGTH,
         unique=True,
         null=True,
         blank=True,
@@ -53,23 +56,31 @@ class User(models.Model):
 class Transaction(models.Model):
 
     # Auto-generated fields
-    id = models.UUIDField(default=uuid.uuid4(), primary_key=True, unique=True)
-    timestamp = models.DateTimeField(default=timezone.now())
+    id = models.UUIDField(
+        default=uuid.uuid4(), primary_key=True, unique=True, blank=True
+    )
+    timestamp = models.DateTimeField(default=timezone.now(), blank=True)
     # Fields to be provided
     amount = models.DecimalField(
-        decimal_places=10, validators=transaction_amount_validators()
+        max_digits=constants.MAX_TRANSACTION_DIGITS,
+        decimal_places=constants.MAX_TRANSACTION_DECIMALS,
+        validators=transaction_amount_validators(),
     )
-    status = models.CharField(choices=TransactionStatusChoices.LIST)
+    status = models.CharField(
+        max_length=20, choices=TransactionStatusChoices.LIST, blank=True
+    )
     sender = models.ForeignKey(
-        to=User, on_delete=models.SET_NULL, related_name="transactions"
+        null=True, to=User, on_delete=models.SET_NULL, related_name="transactions"
     )
 
     receiver_upi_id = models.CharField(
+        max_length=255,
         null=True,
         blank=True,
         validators=indian_upi_id_validators(),
     )
     receiver_account_number = models.CharField(
+        max_length=constants.INDIAN_BANK_ACCOUNT_MAX_LENGTH,
         null=True,
         blank=True,
         validators=indian_bank_account_validators(),

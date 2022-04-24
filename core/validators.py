@@ -5,7 +5,7 @@ from django.core.validators import (
     MaxValueValidator,
 )
 
-from services import regex, constants
+from core.services import regex, constants
 
 
 def indian_mobile_number_validators() -> "list[BaseValidator]":
