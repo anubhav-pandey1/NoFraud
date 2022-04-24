@@ -10,7 +10,7 @@
 Good fraud prevention starts with validation measures like KYC so I have implemented basic validations. Phone number, bank account must be Indian. UPI ID must follow the usual format
 ### Fraud Scenarios:
 - UPI ID and phone number belong to the same user for a transaction.
-- More than 50 transaction requests by the same IP in the last minute (rate-limit).
+- More than 50 transaction requests (even with different amounts) by the same IP in the last minute (rate-limit).
 - More than 10 transactions of the same amount within 2 minutes (from the same user).
 - More than 30 transactions of the same amount within 2 minutes (from any user, to prevent Bangladesh-like heist).
-- If a user has 1 fraudulent transaction in a cool-down period of last 30 days, the current transaction will also be marked as fraudulent
+- If a user has more than 1 fraudulent transaction in a cool-down period of last 30 days, the current transaction will also be marked as fraudulent

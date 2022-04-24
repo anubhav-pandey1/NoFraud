@@ -3,12 +3,7 @@ import uuid
 from django.db import models
 from django.utils import timezone
 
-from core.validators import (
-    indian_mobile_number_validators,
-    indian_upi_id_validators,
-    indian_bank_account_validators,
-    transaction_amount_validators,
-)
+from core.validators import Validators
 from core.choices import TransactionStatusChoices
 from core.services import constants
 
@@ -21,7 +16,7 @@ class User(models.Model):
         max_length=constants.INDIAN_PHONE_NUMBER_MAX_LENGTH,
         primary_key=True,
         unique=True,
-        validators=indian_mobile_number_validators(),
+        validators=Validators.INDIAN_MOBILE_NUMBERS,
     )
 
     upi_id = models.CharField(
@@ -29,14 +24,14 @@ class User(models.Model):
         unique=True,
         null=True,
         blank=True,
-        validators=indian_upi_id_validators(),
+        validators=Validators.INDIAN_UPI_ID,
     )
     account_number = models.CharField(
         max_length=constants.INDIAN_BANK_ACCOUNT_MAX_LENGTH,
         unique=True,
         null=True,
         blank=True,
-        validators=indian_bank_account_validators(),
+        validators=Validators.INDIAN_BANK_ACCOUNT,
     )
 
     class Meta:
@@ -62,7 +57,7 @@ class Transaction(models.Model):
     amount = models.DecimalField(
         max_digits=constants.MAX_TRANSACTION_DIGITS,
         decimal_places=constants.MAX_TRANSACTION_DECIMALS,
-        validators=transaction_amount_validators(),
+        validators=Validators.TRANSACTION_AMOUNT,
     )
     status = models.CharField(
         max_length=20, choices=TransactionStatusChoices.LIST, blank=True
@@ -75,13 +70,13 @@ class Transaction(models.Model):
         max_length=255,
         null=True,
         blank=True,
-        validators=indian_upi_id_validators(),
+        validators=Validators.INDIAN_UPI_ID,
     )
     receiver_account_number = models.CharField(
         max_length=constants.INDIAN_BANK_ACCOUNT_MAX_LENGTH,
         null=True,
         blank=True,
-        validators=indian_bank_account_validators(),
+        validators=Validators.INDIAN_BANK_ACCOUNT,
     )
 
     class Meta:

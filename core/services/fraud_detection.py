@@ -74,7 +74,7 @@ class FraudDetection:
         return suspicious_count > FraudDetection.ALL_USER_LIMIT
 
     def fraud_cooldown_check(self) -> bool:
-        """If a user has 1 fraudulent transaction in a cool-down period of last 30 days,
+        """If a user has more than 1 fraudulent transaction in a cool-down period of last 30 days,
         the current transaction will also be marked as fraudulent"""
         # self.sender.select_related()
         time_range = timezone.now() + timedelta(

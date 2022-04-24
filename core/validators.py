@@ -8,20 +8,32 @@ from django.core.validators import (
 from core.services import regex, constants
 
 
-def indian_mobile_number_validators() -> "list[BaseValidator]":
-    return [RegexValidator(regex.indian_mobile_number())]
+class Validators:
+    INDIAN_MOBILE_NUMBERS = [
+        RegexValidator(
+            regex=regex.indian_mobile_number(),
+            message="Please enter a valid Indian mobile number",
+            code="invalid_phone_number",
+        )
+    ]
 
+    INDIAN_UPI_ID = [
+        RegexValidator(
+            regex=regex.indian_upi(),
+            message="Please enter a valid Indian UPI ID",
+            code="invalid_upi_id",
+        )
+    ]
 
-def indian_upi_id_validators() -> "list[BaseValidator]":
-    return [RegexValidator(regex.indian_upi())]
+    INDIAN_BANK_ACCOUNT = [
+        RegexValidator(
+            regex=regex.indian_bank_account(),
+            message="Please enter a valid Indian bank account number",
+            code="invalid_account_number",
+        )
+    ]
 
-
-def indian_bank_account_validators() -> "list[BaseValidator]":
-    return [RegexValidator(regex.indian_bank_account())]
-
-
-def transaction_amount_validators() -> "list[BaseValidator]":
-    return [
+    TRANSACTION_AMOUNT = [
         MinValueValidator(constants.MIN_TRANSACTION_AMOUNT),
         MaxValueValidator(constants.MAX_TRANSACTION_AMOUNT),
     ]
