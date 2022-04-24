@@ -1,4 +1,3 @@
-from typing import Any
 from datetime import timedelta
 
 from django.utils import timezone
@@ -6,6 +5,7 @@ from django.db.models import Q
 from django.db.models.query import QuerySet
 
 from core.models import Transaction, User
+from core.choices import TransactionStatusChoices
 
 
 class FraudDetection:
@@ -14,6 +14,7 @@ class FraudDetection:
     FRAUD_WINDOW_MINUTES = 2
     SAME_USER_LIMIT = 10
     ALL_USER_LIMIT = 30
+    FRAUD_COOLDOWN_DAYS = 30
     FRAUD_MONTHLY_LIMIT = 1
 
     def __init__(self, data: dict) -> None:
@@ -27,7 +28,11 @@ class FraudDetection:
         self.receiver_account = self.data.get("receiver_account_number")
 
     def __call__(self) -> bool:
-        return self.send_to_self() or self.rapid_same_transactions()
+        return (
+            self.send_to_self()
+            or self.rapid_same_transactions()
+            or self.fraud_cooldown_check()
+        )
 
     def send_to_self(self) -> bool:
         """Check if senders send payment to their own UPI ID or bank account"""
@@ -69,6 +74,15 @@ class FraudDetection:
         return suspicious_count > FraudDetection.ALL_USER_LIMIT
 
     def fraud_cooldown_check(self) -> bool:
-        """Once a user is caught with a fraudulent transaction, all their transactions will
-        keep getting flagged as fraudulent with a cool-down period of 1 month"""
+        """If a user has 1 fraudulent transaction in a cool-down period of last 30 days,
+        the current transaction will also be marked as fraudulent"""
         # self.sender.select_related()
+        time_range = timezone.now() + timedelta(
+            days=-FraudDetection.FRAUD_COOLDOWN_DAYS
+        )
+        fraud_count = Transaction.objects.filter(
+            Q(sender__phone_number__exact=self.sender_phone_number)
+            & Q(timestamp__gte=time_range)
+            & Q(status__exact=TransactionStatusChoices.TERRORIST)
+        ).count()
+        return fraud_count > FraudDetection.FRAUD_MONTHLY_LIMIT

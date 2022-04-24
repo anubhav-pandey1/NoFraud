@@ -13,4 +13,4 @@ Good fraud prevention starts with validation measures like KYC so I have impleme
 - More than 50 transaction requests by the same IP in the last minute (rate-limit).
 - More than 10 transactions of the same amount within 2 minutes (from the same user).
 - More than 30 transactions of the same amount within 2 minutes (from any user, to prevent Bangladesh-like heist).
-- If a user is caught with a fraudulent transaction, all their transactions will keep getting flagged as fraudulent with a cool-down period of 1 month
+- If a user has 1 fraudulent transaction in a cool-down period of last 30 days, the current transaction will also be marked as fraudulent
