@@ -56,10 +56,8 @@ class User(models.Model):
 class Transaction(models.Model):
 
     # Auto-generated fields
-    id = models.UUIDField(
-        default=uuid.uuid4(), primary_key=True, unique=True, blank=True
-    )
-    timestamp = models.DateTimeField(default=timezone.now(), blank=True)
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, blank=True)
+    timestamp = models.DateTimeField(default=timezone.now, blank=True)
     # Fields to be provided
     amount = models.DecimalField(
         max_digits=constants.MAX_TRANSACTION_DIGITS,

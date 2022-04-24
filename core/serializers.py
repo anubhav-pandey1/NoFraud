@@ -17,14 +17,17 @@ class TransactionSerializer(serializers.ModelSerializer):
     sender = serializers.PrimaryKeyRelatedField(
         many=False, read_only=False, queryset=User.objects.all()
     )
-    # amount = serializers.DecimalField(
-    #     max_digits=constants.MAX_TRANSACTION_DIGITS,
-    #     decimal_places=constants.MAX_TRANSACTION_DECIMALS,
-    # )
 
     class Meta:
         model = Transaction
-        fields = ["amount", "sender", "receiver_upi_id", "receiver_account_number"]
+        fields = [
+            "id",
+            "timestamp",
+            "amount",
+            "sender",
+            "receiver_upi_id",
+            "receiver_account_number",
+        ]
 
     def validate(self, data):
         """Validation that exactly one of UPI ID and account number is provided."""
