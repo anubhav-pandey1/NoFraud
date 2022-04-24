@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from core.models import User, Transaction
-from core.services import constants
 
 
 class UserSerializer(serializers.ModelSerializer):
