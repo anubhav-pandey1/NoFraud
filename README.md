@@ -15,23 +15,27 @@ Good fraud prevention starts with validation measures like KYC so I have impleme
 - More than 30 transactions of the same amount within 2 minutes (from any user, to prevent Bangladesh-like heist).
 - If a user has more than 1 fraudulent transaction in a cool-down period of last 30 days, the current transaction will also be marked as fraudulent
 
-### Instructions to run:
+### Instructions to run: Using a Windows machine is recommended
 
 1. Setup a virtual environment:
 ```sh
-$ pip install virtualenv
-$ virtualenv venv
-$ venv/scripts/activate
+pip install virtualenv
+```
+```sh
+virtualenv venv
+```
+```sh
+venv/scripts/activate
 ```
 
 2. Install the required dependencies after activating the virtual environment
 ```sh
-$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 3. Run the server directly since migration files and test DB is present in the repo (not recommended in actual work setup)
 ```sh
-$ python manage.py runserver
+python manage.py runserver
 ```
 
 4. Use a client like Postman or Thunder Client to make requests to the API endpoint:
@@ -61,6 +65,8 @@ $ python manage.py runserver
 
 5. Run tests using the installed coverage package
 ```sh
-$ coverage run manage.py test
-$ coverage report
+coverage run manage.py test
+```
+```sh
+coverage report
 ```
